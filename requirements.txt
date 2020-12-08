@@ -1,0 +1,16 @@
+requests
+flask
+vedis
+twine
+pytest
+coverage
+pytest-cov
+ffmpy
+spotipy
+youtube-dl
+setuptools
+validators
+tldextract
+telethon
+mutagen
+psycopg2-binary
