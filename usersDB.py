@@ -7,9 +7,9 @@ import traceback
 
 
 def conect():
-    connection = psycopg2.connect(database='d5rn0f942mf0uc', user='znldufnogddpzn',
-                                  password='059994678e7515e8f49ddba068ce34d7476986953ac95911a31c54ac717e2187',
-                                  host='ec2-54-247-188-107.eu-west-1.compute.amazonaws.com', port='5432')
+    connection = psycopg2.connect(database='databsname', user='databsuser',
+                                  password='databspass',
+                                  host='databshos', port='port')
     cursor = connection.cursor()
     return [connection, cursor]
 
