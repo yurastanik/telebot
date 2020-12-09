@@ -22,8 +22,8 @@ del_ls = []
 act_dict = {}
 clocks = ['🕐', '🕑', '🕒', '🕓', '🕔', '🕕', '🕖', '🕗', '🕘', '🕙', '🕚', '🕛']
 ditc = {}
-thumbs = ['http://i.piccy.info/i9/7c2ebeceaf63b3d1b5ea8999922cc0ab/1593460967/92862/1385798/Mus.jpg',
-          'http://i.piccy.info/i9/2043c40f07a4b2e01ece1244d1c653b3/1593460281/161804/1385798/Mus1.png']
+thumbs = ['http://link1',
+          'http://link2']
 
 res_av = threading.Event()
 res_av.set()
@@ -74,7 +74,7 @@ def video_id(url):
 def namevid(videoid):
     try:
         url = 'https://www.googleapis.com/youtube/v3/videos?part=snippet&id=' + str(videoid) + \
-              '&key=AIzaSyDI9wePPlex74bPQLYwbwy5xL3EcXn9tXY'
+              '&key=your_key'
         r = requests.get(url).json()
         name = r['items'][-1]['snippet']['title']
         art = r['items'][-1]['snippet']['channelTitle']
@@ -259,7 +259,7 @@ def download_task(quality, download_format, output_path, chat_id, mes_id, artist
                                                                                "обработка ролика</i>\n "
                                                                                "     ⏳ <i>Подготовка к отправке</i>\n "
                                                                                "     ⏳ <i>Отправка аудиофайла</i>")
-                    Bot(955514245).sendMessage(url)
+                    Bot(other_channel_id).sendMessage(url)
                     ditc.update({url: {"chat": chat_id, "mes_id": mes_id, "mes_id2": mes_id2}})
                     bot.editMessageText(mes_id,
                                         "🎧<b>" + artist + " - " + trackname + "</b>\n\n      ✅ <i>Загрузка и "
@@ -308,7 +308,7 @@ def download_task(quality, download_format, output_path, chat_id, mes_id, artist
             delete_files.append(output_path)
         size = round(int(os.path.getsize(output_path)) / int(1048576), 2)
         if size > 45:
-            Bot(955514245).sendMessage(url)
+            Bot(other_channel_id).sendMessage(url)
             ditc.update({url: {"chat": chat_id, "mes_id": mes_id, "mes_id2": mes_id2}})
             bot.editMessageText(mes_id,
                                 "🎧<b>" + artist + " - " + trackname + "</b>\n\n      ✅ <i>Загрузка и "
