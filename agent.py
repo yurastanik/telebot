@@ -5,9 +5,9 @@ import sys
 import traceback
 
 
-api_id = 1197665
-api_hash = '3d066cbf78e6561ad40953f4cf66f76d'
-phone = '+380500279850'
+api_id = api_id
+api_hash = 'api_hash'
+phone = 'phone_num'
 
 
 async def send_rec(mes, aid):
@@ -23,13 +23,13 @@ client = TelegramClient('test', api_id, api_hash)
 @client.on(events.NewMessage)
 async def my_event_handler(event):
     try:
-        if event.from_id == 1233508198:
-            await client.forward_messages(755245733, event.message.id, event.from_id)
-        if event.from_id == 755245733:
+        if event.from_id == 123456789:
+            await client.forward_messages(987654321, event.message.id, event.from_id)
+        if event.from_id == 987654321:
             if event.media:
-                mes = await client.get_messages(755245733, ids=event.message.id-2)
+                mes = await client.get_messages(987654321, ids=event.message.id-2)
                 aid = str(event.reply_markup.rows[0].buttons[0].url).replace("http://t.me/Gozilla_bot?start=", "")
-                await client.send_message(-1001393645013, mes.message + "+" + str(aid), link_preview=False)
+                await client.send_message(-channel_id, mes.message + "+" + str(aid), link_preview=False)
                 await send_rec(event.message.id, event.from_id)
     except Exception:
         tb = sys.exc_info()[2]
