@@ -30,7 +30,7 @@ def answerCallbackQuery(call_id, text, show_alert=True):
 class Bot:
     def __init__(self, chat_id):
         self.chat_id = chat_id
-        self.error_id = -1001396479175
+        self.error_id = channel_id
         if chat_id is None:
             self.chat_id = self.error_id
 
@@ -101,15 +101,12 @@ class Bot:
         url = URL + "sendAudio"
         try:
             if tgid:
-                data = {'audio': file, 'chat_id': self.chat_id, 'caption': "<a href=\"http://t.me/muspla_bot"
-                                                                           "\">MusicPlanet</a>: ""<i>" + str(
-                    size) + "Mb</i>",
+                data = {'audio': file, 'chat_id': self.chat_id, 'caption': "your caption",
                         'parse_mode': 'HTML'}
                 requests.post(url, data=data).json()
             else:
                 with open(str(file), 'rb') as f:
-                    data = {'chat_id': self.chat_id, 'caption': "<a href=\"http://t.me/muspla_bot"
-                                                                "\">MusicPlanet</a>: ""<i>" + str(size) + "Mb</i>",
+                    data = {'chat_id': self.chat_id, 'caption': "your caption",
                             'parse_mode': 'HTML'}
                     files = {'audio': f}
                     r = requests.post(url, files=files, data=data).json()
