@@ -47,7 +47,7 @@ def main_func(r):
                 calldata = None
                 try:
                     channel_post = r['channel_post']
-                    if channel_post['chat']['id'] != -1001393645013:
+                    if channel_post['chat']['id'] != channel_id:
                         channel_post = None
                 except KeyError:
                     channel_post = None
@@ -72,7 +72,7 @@ def main_func(r):
                 audio_id = audio['file_id']
                 size = channel_post['caption'].split(":")[1].replace(" ", "").replace("Mb", "")
                 aid = str(channel_post['reply_markup']['inline_keyboard'][0][0]['url']).replace("http://t.me"
-                                                                                                "/Gozilla_bot?start=",
+                                                                                                "/bot?start=",
                                                                                                 "")
                 url = keys_dct.get(aid)
                 inf = download_task.ditc.get(url)
