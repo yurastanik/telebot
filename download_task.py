@@ -27,6 +27,7 @@ thumbs = ['http://i.piccy.info/i9/7c2ebeceaf63b3d1b5ea8999922cc0ab/1593460967/92
 
 res_av = threading.Event()
 res_av.set()
+errors = ['\\', '/', '|', '?', ':', '<', '>']
 
 
 def thread(fn):
@@ -45,7 +46,7 @@ def deleteFile(file):
     except Exception:
         tb = sys.exc_info()[2]
         tbinfo = traceback.format_tb(tb)[0]
-        Bot(None).sendMessage(text=str(tbinfo) + "\n" + str(sys.exc_info()[1]))
+        #Bot(None).sendMessage(text=str(tbinfo) + "\n" + str(sys.exc_info()[1]))
     res_av.set()
 
 
@@ -203,15 +204,15 @@ def download_task(quality, download_format, output_path, chat_id, mes_id, artist
             except Exception:
                 return None
 
-        correct_name = trackname
+        correct_path = trackname
 
-        if "\\" in trackname or "/" in trackname:
-            correct_name = trackname.replace("\\", "?").replace("/", "?")
+        for er in errors:
+            if er in trackname:
+                correct_path = trackname.replace(er, "-")
 
         output_path += f'{artist} - ' \
-                       f'{correct_name}.{download_format}'
+                       f'{correct_path}.{download_format}'
         delete_files.append(str(output_path))
-        utils.create_dir(output_path)
         temp_file = str(uuid.uuid1())
         delete_files.append(f'{MYDIR}/{utils.TEMP_PATH}/{str(temp_file)}.mp3')
         options = {
@@ -250,6 +251,7 @@ def download_task(quality, download_format, output_path, chat_id, mes_id, artist
             query = url
         with youtube_dl.YoutubeDL(options) as ydl:
             inf = ydl.extract_info(query, download=False)
+            print(inf.get("duration"))
             if inf.get("duration") is not None:
                 if inf.get("duration") > 3950:
                     bot.editMessageText(mes_id,
@@ -299,13 +301,24 @@ def download_task(quality, download_format, output_path, chat_id, mes_id, artist
             delete_files.remove(cover_art)
             deleteFile(output_path)
             os.rename(f'{MYDIR}/{utils.TEMP_PATH}/{str(temp_file)}.mp3',
-                      f'{MYDIR}/{utils.TEMP_PATH}/{artist} - {trackname}.{download_format}')
+                      f'{MYDIR}/{utils.TEMP_PATH}/{artist} - {correct_path}.{download_format}')
             deleteFile(cover_art)
             delete_files.remove(f'{MYDIR}/{utils.TEMP_PATH}/{str(temp_file)}.mp3')
-            output_path = f'{MYDIR}/{utils.TEMP_PATH}/{artist} - {trackname}.{download_format}'
+            output_path = f'{MYDIR}/{utils.TEMP_PATH}/{artist} - {correct_path}.{download_format}'
             delete_files.append(output_path)
         size = round(int(os.path.getsize(output_path)) / int(1048576), 2)
-        aid = bot.sendAudio(output_path, size)
+        if size > 45:
+            Bot(955514245).sendMessage(url)
+            ditc.update({url: {"chat": chat_id, "mes_id": mes_id, "mes_id2": mes_id2}})
+            bot.editMessageText(mes_id,
+                                "🎧<b>" + artist + " - " + trackname + "</b>\n\n      ✅ <i>Загрузка и "
+                                                                       "обработка ролика</i>\n      ✅ "
+                                                                       "<i>Подготовка к отправке</i>\n "
+                                                                       "     ⏳ <i>Отправка аудиофайла</i>")
+            act_dict.update({str(chat_id) + str(mes_id): True})
+            fakeprocess(mes_id, artist, trackname, bot)
+        else:
+            aid = bot.sendAudio(output_path, size)
         act_dict.pop(key)
         bot.editMessageText(mes_id,
                             "🎧<b>" + artist + " - " + trackname + "</b>\n\n      ✅ <i>Загрузка и "
@@ -315,12 +328,13 @@ def download_task(quality, download_format, output_path, chat_id, mes_id, artist
         Timer(2, delmes, [bot, mes_id, mes_id2]).start()
         for file in delete_files:
             deleteFile(file)
-            delete_files.remove(file)
+        delete_files.clear()
         dbw = vedisdb.VDB(chat_id)
         queue = ast.literal_eval(dbw.get_current_state())
         queue.remove(cid)
         dbw.set_state(queue)
-        data.addmusic(cid, aid[0], aid[1])
+        if aid:
+            data.addmusic(cid, aid[0], aid[1])
     except Exception:
         try:
             dbw = vedisdb.VDB(bot.chat_id)

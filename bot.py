@@ -114,12 +114,15 @@ class Bot:
                     files = {'audio': f}
                     r = requests.post(url, files=files, data=data).json()
                     f.close()
-                return [r["result"]['audio']['file_id'], size]
+                return [r['result']['audio']['file_id'], size]
         except Exception:
             tb = sys.exc_info()[2]
             tbinfo = traceback.format_tb(tb)[0]
+            self.sendMessage(text="Попробуйте ещё раз")
             self.chat_id = self.error_id
-            self.sendMessage(text=str(tbinfo) + "\n" + str(sys.exc_info()[1]))
+            self.sendMessage(text=str(tbinfo) + "\n" + str(sys.exc_info()[1]) + "\n" + r)
+            return False
+
 
     def editMessageReplyMarkup(self, mes_id, new_buttons):
         try:
