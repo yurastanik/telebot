@@ -4,8 +4,8 @@ from track import Track
 import sys
 import traceback
 
-SPOTIPY_CLIENT_ID = "8d688601b6e045f983b8e0b5a33d8fca"
-SPOTIPY_CLIENT_SECRET = "d7211fbb2b7f45068e800ff2bf763212"
+SPOTIPY_CLIENT_ID = "SPOTIPY_CLIENT_ID"
+SPOTIPY_CLIENT_SECRET = "SPOTIPY_CLIENT_SECRET"
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID,
                                                                          client_secret=SPOTIPY_CLIENT_SECRET))
