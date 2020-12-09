@@ -8,9 +8,9 @@ bot = Bot(None)
 
 def conect():
     try:
-        connect = psycopg2.connect(database='d5qra7lfob5dvs', user='bsnjlfmyrjcddb',
-                                   password='d841dd57c541777478a380656687f3ed2541f96e39cab1ae4584bf6dd504aeb4',
-                                   host='ec2-54-75-235-28.eu-west-1.compute.amazonaws.com', port='5432')
+        connect = psycopg2.connect(database='databs', user='databsuser',
+                                   password='databspass',
+                                   host='databshost', port='port')
         cursor = connect.cursor()
         return [connect, cursor]
     except Exception:
